@@ -27,18 +27,22 @@ public class HandyGripHand : MonoBehaviour
 
     private GameObject _handyThumb;
     private List<GameObject> _handyFingers;
+
+    public bool _drawDebugRays;
+    private List<GameObject> _debugLines;
+    
     private void Start()
     {
         Assert.IsTrue(fingerCount > 0 && fingerCount <= _maximumFingers);
         _handyFingers = new List<GameObject>(_maximumFingers);
-        Debug.Log(_handyFingers.Capacity);
         GetHandyFingerReferences();
         SetFingerTransforms();
+        if(_drawDebugRays) SetupDebugLines();
     }
 
     private void Update()
     {
-        
+        if(_drawDebugRays) DrawDebugRays();
     }
 
     private void GetHandyFingerReferences()
@@ -57,5 +61,32 @@ public class HandyGripHand : MonoBehaviour
         _handyFingers[(int)LibHandyGrip.FingerType.Middle].GetComponent<HandyGripFinger>().SetTransform(middle);
         _handyFingers[(int)LibHandyGrip.FingerType.Ring].GetComponent<HandyGripFinger>().SetTransform(ring);
         _handyFingers[(int)LibHandyGrip.FingerType.Pinky].GetComponent<HandyGripFinger>().SetTransform(pinky);
+    }
+
+    private void DrawDebugRays()
+    {
+        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Index].transform.position, Color.red, 0, true);
+        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Middle].transform.position, Color.red, 0, true);
+        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Ring].transform.position, Color.red, 0, true);
+        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Pinky].transform.position, Color.red, 0, true);
+    }
+
+    private void SetupDebugLines()
+    {
+        _debugLines = new List<GameObject>(_maximumFingers);
+
+        for (int i = 0; i < _debugLines.Capacity; i++)
+        {
+            var line = new GameObject();
+            line.transform.position = _handyThumb.transform.position;
+            var lr = line.AddComponent<LineRenderer>();
+            lr.startColor = Color.red;
+            lr.endColor = Color.red;
+            lr.SetPosition(0, _handyThumb.transform.position);
+            lr.SetPosition(1, _handyFingers[i].transform.position);
+            lr.startWidth = 0.1f;
+            lr.endWidth = 0.1f;
+            _debugLines.Insert(i, line);
+        }
     }
 }
