@@ -3,21 +3,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class HandyHitInfo
+{
+    public HandyHitInfo(float distance)
+    {
+        distanceFromFinger = distance;
+    }
+    public float distanceFromFinger;
+};
+
+public class HandyObjectList
+{
+    public List<HandyGripObject> objectsWithinGrasp;
+    public List<HandyHitInfo> hitInfos;
+
+    public HandyObjectList()
+    {
+        objectsWithinGrasp = new List<HandyGripObject>();
+        hitInfos = new List<HandyHitInfo>();
+    }
+
+    public HandyGripObject GetObject(int i)
+    {
+        return objectsWithinGrasp[i];
+    }
+
+    public HandyHitInfo GetHitInfo(int i)
+    {
+        return hitInfos[i];
+    }
+    
+    public void AddRecord(HandyGripObject hgo, HandyHitInfo hhi)
+    {
+        objectsWithinGrasp.Add(hgo);
+        hitInfos.Add(hhi);
+    }
+    public void RemoveRecord(int i)
+    {
+        objectsWithinGrasp.RemoveAt(i);
+        hitInfos.RemoveAt(i);
+    }
+
+    public bool IsEmpty()
+    {
+        return objectsWithinGrasp.Count == 0;
+    }
+
+    public int GetCount()
+    {
+        return objectsWithinGrasp.Count;
+    }
+}
+
 public class HandyGripFinger : MonoBehaviour
 {
     private Transform _transform;
     private HandyGripThumb _thumb;
-    private List<HandyGripObject> _objectsWithinGrasp;
+
+    private HandyObjectList _objectList;
     private HandyGripObject _currentlyCollidedObject;
     
     private void Start()
     {
-        _objectsWithinGrasp = new List<HandyGripObject>();
+        _objectList = new HandyObjectList();
     }
     private void Update()
     {
         transform.position = _transform.position;
-
     }
 
     private void FixedUpdate()
@@ -25,7 +77,11 @@ public class HandyGripFinger : MonoBehaviour
         UpdatePotentiallyGrabbableSet();
         if (AreObjectsWithinGrasp())
         {
-            // TODO : check for collision
+            _currentlyCollidedObject = GetObjectCollision();
+            if (_currentlyCollidedObject)
+            {
+                Debug.Log("Colliding with an object");
+            }
         }
     }
 
@@ -44,7 +100,7 @@ public class HandyGripFinger : MonoBehaviour
         RaycastHit[] hits;
         hits = Physics.RaycastAll(transform.position, _thumb.transform.position);
 
-        HashSet<HandyGripObject> tempObjectSet = new HashSet<HandyGripObject>();
+        HandyObjectList tempList = new HandyObjectList();
 
         for (int i = 0; i < hits.Length; i++)
         {
@@ -52,24 +108,25 @@ public class HandyGripFinger : MonoBehaviour
             var hgo = hit.transform.gameObject.GetComponent<HandyGripObject>();
             if (hgo)
             {
-                tempObjectSet.Add(hgo);
+                var hi = new HandyHitInfo(hit.distance);
+                tempList.AddRecord(hgo, hi);
             }
         }
 
-        if (_objectsWithinGrasp.Count == 0)
+        if (_objectList.IsEmpty())
         {
-            foreach (var t in tempObjectSet)
+            for (int i = 0; i < tempList.objectsWithinGrasp.Count; i++)
             {
-                _objectsWithinGrasp.Add(t);
+                _objectList.AddRecord(tempList.GetObject(i), tempList.GetHitInfo(i));
             }
         }
         else
         {
-            for (int i = _objectsWithinGrasp.Count - 1; i >= 0; i--)
+            for (int i = _objectList.objectsWithinGrasp.Count - 1; i >= 0; i--)
             {
-                if (!tempObjectSet.Contains(_objectsWithinGrasp[i]))
+                if (!tempList.objectsWithinGrasp.Contains(_objectList.objectsWithinGrasp[i]))
                 {
-                    _objectsWithinGrasp.RemoveAt(i);
+                    _objectList.RemoveRecord(i);
                 }
             }
         }
@@ -77,7 +134,20 @@ public class HandyGripFinger : MonoBehaviour
 
     public bool AreObjectsWithinGrasp()
     {
-        return _objectsWithinGrasp.Count != 0;
+        return !_objectList.IsEmpty();
     }
-    
+
+    public HandyGripObject GetObjectCollision()
+    {
+        int objectCount = _objectList.GetCount();
+        for (int i = 0; i < objectCount; i++)
+        {
+            var hi = _objectList.GetHitInfo(i);
+            if (hi.distanceFromFinger < 0.1f)
+            {
+                return _objectList.GetObject(i);
+            }
+        }
+        return null;
+    }
 }
