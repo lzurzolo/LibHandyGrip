@@ -36,6 +36,7 @@ public class HandyGripHand : MonoBehaviour
         Assert.IsTrue(fingerCount > 0 && fingerCount <= _maximumFingers);
         _handyFingers = new List<GameObject>(_maximumFingers);
         GetHandyFingerReferences();
+        SetThumbReferences();
         SetFingerTransforms();
         if(_drawDebugRays) SetupDebugLines();
     }
@@ -56,21 +57,22 @@ public class HandyGripHand : MonoBehaviour
 
     private void SetFingerTransforms()
     {
-        _handyThumb.GetComponent<HandyGripFinger>().SetTransform(thumb);
+        _handyThumb.GetComponent<HandyGripThumb>().SetTransform(thumb);
         _handyFingers[(int)LibHandyGrip.FingerType.Index].GetComponent<HandyGripFinger>().SetTransform(index);
         _handyFingers[(int)LibHandyGrip.FingerType.Middle].GetComponent<HandyGripFinger>().SetTransform(middle);
         _handyFingers[(int)LibHandyGrip.FingerType.Ring].GetComponent<HandyGripFinger>().SetTransform(ring);
         _handyFingers[(int)LibHandyGrip.FingerType.Pinky].GetComponent<HandyGripFinger>().SetTransform(pinky);
     }
-
-    private void DrawDebugRays()
+    
+    private void SetThumbReferences()
     {
-        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Index].transform.position, Color.red, 0, true);
-        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Middle].transform.position, Color.red, 0, true);
-        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Ring].transform.position, Color.red, 0, true);
-        Debug.DrawRay(_handyThumb.transform.position, _handyFingers[(int)LibHandyGrip.FingerType.Pinky].transform.position, Color.red, 0, true);
+        var handyThumbScript = _handyThumb.GetComponent<HandyGripThumb>();
+        foreach (var hgf in _handyFingers)
+        {
+            hgf.GetComponent<HandyGripFinger>().SetThumbReference(handyThumbScript);
+        }
     }
-
+    
     private void SetupDebugLines()
     {
         _debugLines = new List<GameObject>(_maximumFingers);
@@ -80,8 +82,8 @@ public class HandyGripHand : MonoBehaviour
             var line = new GameObject();
             line.transform.position = _handyThumb.transform.position;
             var lr = line.AddComponent<LineRenderer>();
-            lr.startColor = Color.red;
-            lr.endColor = Color.red;
+            lr.material = new Material(Shader.Find("Standard"));
+            lr.material.color = Color.red;
             lr.SetPosition(0, _handyThumb.transform.position);
             lr.SetPosition(1, _handyFingers[i].transform.position);
             lr.startWidth = 0.001f;
@@ -95,6 +97,15 @@ public class HandyGripHand : MonoBehaviour
         for (int i = 0; i < _debugLines.Count; i++)
         {
             var lr = _debugLines[i].GetComponent<LineRenderer>();
+            var finger = _handyFingers[i].GetComponent<HandyGripFinger>();
+            if (finger.AreObjectsWithinGrasp())
+            {
+                lr.material.color = Color.green;
+            }
+            else
+            {
+                lr.material.color = Color.red;
+            }
             lr.SetPosition(0, _handyThumb.transform.position);
             lr.SetPosition(1, _handyFingers[i].transform.position);
         }

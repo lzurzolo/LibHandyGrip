@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1484,6 +1484,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeapHandController
       objectReference: {fileID: 0}
+    - target: {fileID: 11435192, guid: b9c7aaf0d314cb847a3b2a20e893f1b6, type: 3}
+      propertyPath: editTimePose
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 432918, guid: b9c7aaf0d314cb847a3b2a20e893f1b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -1528,10 +1532,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11435192, guid: b9c7aaf0d314cb847a3b2a20e893f1b6, type: 3}
-      propertyPath: editTimePose
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 11406336, guid: b9c7aaf0d314cb847a3b2a20e893f1b6, type: 3}
       propertyPath: ModelPool.Array.size
       value: 1
@@ -1571,6 +1571,7 @@ GameObject:
   - component: {fileID: 1851539439}
   - component: {fileID: 1851539438}
   - component: {fileID: 1851539437}
+  - component: {fileID: 1851539442}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1667,6 +1668,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1851539442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851539436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd3a30ccdcce7443abedf6b921fd3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1867849189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1693,7 @@ GameObject:
   - component: {fileID: 1867849192}
   - component: {fileID: 1867849191}
   - component: {fileID: 1867849190}
+  - component: {fileID: 1867849195}
   m_Layer: 0
   m_Name: LeftCube
   m_TagString: Untagged
@@ -1775,6 +1789,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1867849195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867849189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd3a30ccdcce7443abedf6b921fd3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2115441424 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114245269363414434, guid: 2276723046d707c4f94d431ceb80ab92,
@@ -1794,6 +1820,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8857305905021397781, guid: 7274523864f390c4290672d07f2b5f46,
+        type: 3}
+      propertyPath: m_Name
+      value: HandyGripHand
+      objectReference: {fileID: 0}
     - target: {fileID: 3032856647273993339, guid: 7274523864f390c4290672d07f2b5f46,
         type: 3}
       propertyPath: fingerCount
@@ -1858,11 +1889,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.025
-      objectReference: {fileID: 0}
-    - target: {fileID: 8857305905021397781, guid: 7274523864f390c4290672d07f2b5f46,
-        type: 3}
-      propertyPath: m_Name
-      value: HandyGripHand
       objectReference: {fileID: 0}
     - target: {fileID: 8832030819999435260, guid: 7274523864f390c4290672d07f2b5f46,
         type: 3}

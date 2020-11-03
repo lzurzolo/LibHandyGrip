@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 475110566944745597}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.089, y: 0, z: 0.068}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 8832030819999435260}
   m_RootOrder: 4
@@ -133,7 +133,7 @@ Transform:
   m_GameObject: {fileID: 4588099301406700829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.045, y: 0, z: 0.21}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 8832030819999435260}
   m_RootOrder: 2
@@ -237,7 +237,7 @@ Transform:
   m_GameObject: {fileID: 6754890084538962572}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.022, y: 0, z: 0.185}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 8832030819999435260}
   m_RootOrder: 3
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 1669667620079837843}
   - component: {fileID: 8040273752588505273}
   - component: {fileID: 4522637221040054246}
-  - component: {fileID: 6879409217511579164}
+  - component: {fileID: 8801478936903263877}
   m_Layer: 0
   m_Name: Thumb
   m_TagString: Untagged
@@ -341,7 +341,7 @@ Transform:
   m_GameObject: {fileID: 8223070423975434758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.178, y: 0, z: 0}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 8832030819999435260}
   m_RootOrder: 0
@@ -404,7 +404,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6879409217511579164
+--- !u!114 &8801478936903263877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8223070423975434758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 457c4699ba5d6154da091e3e267a4ce9, type: 3}
+  m_Script: {fileID: 11500000, guid: 62305df147fb89c43ae5f4deb95c38c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8826293796479421159
@@ -445,7 +445,7 @@ Transform:
   m_GameObject: {fileID: 8826293796479421159}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.119, y: 0, z: 0.168}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 8832030819999435260}
   m_RootOrder: 1
@@ -574,3 +574,4 @@ MonoBehaviour:
   middle: {fileID: 0}
   ring: {fileID: 0}
   pinky: {fileID: 0}
+  _drawDebugRays: 0
