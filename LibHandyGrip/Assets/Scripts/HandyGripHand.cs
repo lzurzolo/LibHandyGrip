@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -46,6 +47,16 @@ public class HandyGripHand : MonoBehaviour
         if(_drawDebugRays) UpdateDebugLines();
     }
 
+    private void FixedUpdate()
+    {
+        var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
+        var indexColl = _handyFingers[0].GetComponent<HandyGripFinger>().GetCurrentCollidedObject();
+        
+        if (!thumbColl || !indexColl) return;
+        
+        if(thumbColl == indexColl) Debug.Log("Colliding with same object");
+    }
+
     private void GetHandyFingerReferences()
     {
         _handyThumb = transform.Find("Thumb").gameObject;
@@ -71,6 +82,14 @@ public class HandyGripHand : MonoBehaviour
         {
             hgf.GetComponent<HandyGripFinger>().SetThumbReference(handyThumbScript);
         }
+
+        var fingerScripts = new List<HandyGripFinger>(4);
+        for (int i = 0; i < fingerScripts.Capacity; i++)
+        {
+            fingerScripts.Insert(i, _handyFingers[i].GetComponent<HandyGripFinger>());
+        }
+        
+        handyThumbScript.SetFingerReferences(fingerScripts);
     }
     
     private void SetupDebugLines()

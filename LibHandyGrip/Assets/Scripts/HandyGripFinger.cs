@@ -78,10 +78,6 @@ public class HandyGripFinger : MonoBehaviour
         if (AreObjectsWithinGrasp())
         {
             _currentlyCollidedObject = GetObjectCollision();
-            if (_currentlyCollidedObject)
-            {
-                Debug.Log("Colliding with an object");
-            }
         }
     }
 
@@ -98,7 +94,8 @@ public class HandyGripFinger : MonoBehaviour
     public void UpdatePotentiallyGrabbableSet()
     {
         RaycastHit[] hits;
-        hits = Physics.RaycastAll(transform.position, _thumb.transform.position);
+        Vector3 rayDir = (_thumb.transform.position - transform.position).normalized;
+        hits = Physics.RaycastAll(transform.position, rayDir);
 
         HandyObjectList tempList = new HandyObjectList();
 
@@ -143,11 +140,16 @@ public class HandyGripFinger : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < 0.1f)
+            if (hi.distanceFromFinger < 1.1f)
             {
                 return _objectList.GetObject(i);
             }
         }
         return null;
+    }
+
+    public HandyGripObject GetCurrentCollidedObject()
+    {
+        return _currentlyCollidedObject;
     }
 }

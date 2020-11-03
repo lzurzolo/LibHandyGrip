@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 1669667620079837843}
   - component: {fileID: 8040273752588505273}
   - component: {fileID: 4522637221040054246}
-  - component: {fileID: 8801478936903263877}
+  - component: {fileID: 6315332510621424333}
   m_Layer: 0
   m_Name: Thumb
   m_TagString: Untagged
@@ -404,7 +404,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8801478936903263877
+--- !u!114 &6315332510621424333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8223070423975434758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62305df147fb89c43ae5f4deb95c38c9, type: 3}
+  m_Script: {fileID: 11500000, guid: fa3dddebb53b643498fcb60123b7341b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8826293796479421159
