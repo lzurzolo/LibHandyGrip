@@ -42,7 +42,7 @@ public class HandyGripHand : MonoBehaviour
 
     private void Update()
     {
-        if(_drawDebugRays) DrawDebugRays();
+        if(_drawDebugRays) UpdateDebugLines();
     }
 
     private void GetHandyFingerReferences()
@@ -84,9 +84,19 @@ public class HandyGripHand : MonoBehaviour
             lr.endColor = Color.red;
             lr.SetPosition(0, _handyThumb.transform.position);
             lr.SetPosition(1, _handyFingers[i].transform.position);
-            lr.startWidth = 0.1f;
-            lr.endWidth = 0.1f;
+            lr.startWidth = 0.001f;
+            lr.endWidth = 0.001f;
             _debugLines.Insert(i, line);
+        }
+    }
+
+    private void UpdateDebugLines()
+    {
+        for (int i = 0; i < _debugLines.Count; i++)
+        {
+            var lr = _debugLines[i].GetComponent<LineRenderer>();
+            lr.SetPosition(0, _handyThumb.transform.position);
+            lr.SetPosition(1, _handyFingers[i].transform.position);
         }
     }
 }
