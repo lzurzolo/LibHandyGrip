@@ -31,6 +31,8 @@ public class HandyGripHand : MonoBehaviour
 
     public bool _drawDebugRays;
     private List<GameObject> _debugLines;
+
+    private HandyGripObject _lastHeldObject;
     
     private void Start()
     {
@@ -51,10 +53,20 @@ public class HandyGripHand : MonoBehaviour
     {
         var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
         var indexColl = _handyFingers[0].GetComponent<HandyGripFinger>().GetCurrentCollidedObject();
-        
-        if (!thumbColl || !indexColl) return;
-        
-        if(thumbColl == indexColl) Debug.Log("Colliding with same object");
+
+        if (!thumbColl || !indexColl)
+        {
+            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
+            return;
+        }
+
+        if (thumbColl != indexColl)
+        {
+            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
+            return;
+        }
+        MoveObject(thumbColl);
+        _lastHeldObject = thumbColl;
     }
 
     private void GetHandyFingerReferences()
@@ -128,5 +140,11 @@ public class HandyGripHand : MonoBehaviour
             lr.SetPosition(0, _handyThumb.transform.position);
             lr.SetPosition(1, _handyFingers[i].transform.position);
         }
+    }
+
+    private void MoveObject(HandyGripObject hgo)
+    {
+        var midpoint = 0.5f * (_handyThumb.transform.position + _handyFingers[0].transform.position);
+        hgo.SetGrabPosition(midpoint);
     }
 }

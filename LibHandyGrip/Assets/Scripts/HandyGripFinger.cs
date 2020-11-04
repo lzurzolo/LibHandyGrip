@@ -140,7 +140,7 @@ public class HandyGripFinger : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < 1.1f)
+            if (hi.distanceFromFinger < 0.005f)
             {
                 return _objectList.GetObject(i);
             }
