@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,15 +19,20 @@ public class HandyGripThumb : MonoBehaviour
     private void Update()
     {
         transform.position = _transform.position;
+        //if(_currentlyCollidedObject) Debug.Log("Thumb is colliding with " + _currentlyCollidedObject);
     }
     
     private void FixedUpdate()
     {
-        UpdatePotentiallyGrabbableSet();
         if (AreObjectsWithinGrasp())
         {
-            _currentlyCollidedObject = GetObjectCollision();
+            _currentlyCollidedObject = SetObjectCollision();
         }
+        else
+        {
+            _currentlyCollidedObject = null;
+        }
+        UpdatePotentiallyGrabbableSet();
     }
     
     public void SetTransform(Transform t)
@@ -54,7 +60,7 @@ public class HandyGripThumb : MonoBehaviour
             var hgo = hit.transform.gameObject.GetComponent<HandyGripObject>();
             if (hgo)
             {
-                var hi = new HandyHitInfo(hit.distance);
+                var hi = new HandyHitInfo(hit.distance, hit.collider.contactOffset);
                 tempList.AddRecord(hgo, hi);
             }
         }
@@ -83,13 +89,13 @@ public class HandyGripThumb : MonoBehaviour
         return !_objectList.IsEmpty();
     }
 
-    public HandyGripObject GetObjectCollision()
+    public HandyGripObject SetObjectCollision()
     {
         int objectCount = _objectList.GetCount();
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < 0.1f)
+            if (hi.distanceFromFinger < hi.contactOffset)
             {
                 return _objectList.GetObject(i);
             }
@@ -100,5 +106,17 @@ public class HandyGripThumb : MonoBehaviour
     public HandyGripObject GetCurrentCollidedObject()
     {
         return _currentlyCollidedObject;
+    }
+
+    public void OnCollisionExit(Collision other)
+    {
+        var hgo = other.gameObject.GetComponent<HandyGripObject>();
+        if (!hgo) return;
+        if (hgo == _currentlyCollidedObject) _currentlyCollidedObject = null;
+    }
+    
+    public void ClearCollidedObject()
+    {
+        _currentlyCollidedObject = null;
     }
 }

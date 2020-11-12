@@ -47,10 +47,6 @@ public class HandyGripHand : MonoBehaviour
     private void Update()
     {
         if(_drawDebugRays) UpdateDebugLines();
-    }
-
-    private void FixedUpdate()
-    {
         var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
         var indexColl = _handyFingers[0].GetComponent<HandyGripFinger>().GetCurrentCollidedObject();
 
@@ -69,6 +65,11 @@ public class HandyGripHand : MonoBehaviour
         _lastHeldObject = thumbColl;
     }
 
+    private void FixedUpdate()
+    {
+
+    }
+
     private void GetHandyFingerReferences()
     {
         _handyThumb = transform.Find("Thumb").gameObject;
@@ -76,6 +77,11 @@ public class HandyGripHand : MonoBehaviour
         _handyFingers.Insert((int)LibHandyGrip.FingerType.Middle, transform.Find("Middle").gameObject);
         _handyFingers.Insert((int)LibHandyGrip.FingerType.Ring, transform.Find("Ring").gameObject);
         _handyFingers.Insert((int)LibHandyGrip.FingerType.Pinky, transform.Find("Pinky").gameObject);
+
+        for (int i = 0; i < _handyFingers.Count; i++)
+        {
+            _handyFingers[i].GetComponent<HandyGripFinger>().SetFingerID((LibHandyGrip.FingerType)i);
+        }
     }
 
     private void SetFingerTransforms()

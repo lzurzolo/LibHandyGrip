@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Leap;
 using UnityEngine;
 
 public class HandyHitInfo
 {
-    public HandyHitInfo(float distance)
+    public HandyHitInfo(float distance, float offset)
     {
         distanceFromFinger = distance;
+        contactOffset = offset;
     }
     public float distanceFromFinger;
+    public float contactOffset;
 };
 
 public class HandyObjectList
@@ -62,6 +65,8 @@ public class HandyGripFinger : MonoBehaviour
 
     private HandyObjectList _objectList;
     private HandyGripObject _currentlyCollidedObject;
+
+    private LibHandyGrip.FingerType _whichFinger;
     
     private void Start()
     {
@@ -70,15 +75,20 @@ public class HandyGripFinger : MonoBehaviour
     private void Update()
     {
         transform.position = _transform.position;
+        //if(_currentlyCollidedObject) Debug.Log(_whichFinger.ToString() + " is colliding with " + _currentlyCollidedObject);
     }
 
     private void FixedUpdate()
     {
-        UpdatePotentiallyGrabbableSet();
         if (AreObjectsWithinGrasp())
         {
-            _currentlyCollidedObject = GetObjectCollision();
+            _currentlyCollidedObject = SetObjectCollision();
         }
+        else
+        {
+            _currentlyCollidedObject = null;
+        }
+        UpdatePotentiallyGrabbableSet();
     }
 
     public void SetTransform(Transform t)
@@ -105,7 +115,7 @@ public class HandyGripFinger : MonoBehaviour
             var hgo = hit.transform.gameObject.GetComponent<HandyGripObject>();
             if (hgo)
             {
-                var hi = new HandyHitInfo(hit.distance);
+                var hi = new HandyHitInfo(hit.distance, hit.collider.contactOffset);
                 tempList.AddRecord(hgo, hi);
             }
         }
@@ -134,13 +144,13 @@ public class HandyGripFinger : MonoBehaviour
         return !_objectList.IsEmpty();
     }
 
-    public HandyGripObject GetObjectCollision()
+    public HandyGripObject SetObjectCollision()
     {
         int objectCount = _objectList.GetCount();
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < 0.005f)
+            if (hi.distanceFromFinger < hi.contactOffset)
             {
                 return _objectList.GetObject(i);
             }
@@ -151,5 +161,22 @@ public class HandyGripFinger : MonoBehaviour
     public HandyGripObject GetCurrentCollidedObject()
     {
         return _currentlyCollidedObject;
+    }
+    
+    public void SetFingerID(LibHandyGrip.FingerType f)
+    {
+        _whichFinger = f;
+    }
+
+    public void OnCollisionExit(Collision other)
+    {
+        var hgo = other.gameObject.GetComponent<HandyGripObject>();
+        if (!hgo) return;
+        if (hgo == _currentlyCollidedObject) _currentlyCollidedObject = null;
+    }
+
+    public void ClearCollidedObject()
+    {
+        _currentlyCollidedObject = null;
     }
 }
