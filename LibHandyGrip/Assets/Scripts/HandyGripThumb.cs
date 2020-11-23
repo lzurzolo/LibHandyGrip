@@ -20,6 +20,13 @@ public class HandyGripThumb : MonoBehaviour
     {
         transform.position = _transform.position;
         //if(_currentlyCollidedObject) Debug.Log("Thumb is colliding with " + _currentlyCollidedObject);
+        if (AreObjectsWithinGrasp())
+        {
+            foreach (var o in _objectList.objectsWithinGrasp)
+            {
+                //Debug.Log(o.name + " is within grasp");
+            }
+        }
     }
     
     private void FixedUpdate()
@@ -80,6 +87,11 @@ public class HandyGripThumb : MonoBehaviour
                 {
                     _objectList.RemoveRecord(i);
                 }
+                else
+                {
+                    var tObjectRef = tempList.objectsWithinGrasp.IndexOf(_objectList.objectsWithinGrasp[i]);
+                    _objectList.hitInfos[i].UpdateHitInfo(tempList.hitInfos[tObjectRef].distanceFromFinger, tempList.hitInfos[tObjectRef].contactOffset);
+                }
             }
         }
     }
@@ -95,7 +107,9 @@ public class HandyGripThumb : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < hi.contactOffset)
+            Debug.Log("distance from finger " + hi.distanceFromFinger);
+            Debug.Log("contact offset " + hi.contactOffset);
+            if (hi.distanceFromFinger < 0.01f)
             {
                 return _objectList.GetObject(i);
             }
@@ -109,13 +123,6 @@ public class HandyGripThumb : MonoBehaviour
     }
 
     public void OnCollisionExit(Collision other)
-    {
-        var hgo = other.gameObject.GetComponent<HandyGripObject>();
-        if (!hgo) return;
-        if (hgo == _currentlyCollidedObject) _currentlyCollidedObject = null;
-    }
-    
-    public void ClearCollidedObject()
     {
         _currentlyCollidedObject = null;
     }

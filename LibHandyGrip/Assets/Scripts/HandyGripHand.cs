@@ -47,27 +47,22 @@ public class HandyGripHand : MonoBehaviour
     private void Update()
     {
         if(_drawDebugRays) UpdateDebugLines();
-        var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
-        var indexColl = _handyFingers[0].GetComponent<HandyGripFinger>().GetCurrentCollidedObject();
-
-        if (!thumbColl || !indexColl)
-        {
-            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
-            return;
-        }
-
-        if (thumbColl != indexColl)
-        {
-            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
-            return;
-        }
-        MoveObject(thumbColl);
-        _lastHeldObject = thumbColl;
     }
 
     private void FixedUpdate()
     {
+        var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
+        var indexColl = _handyFingers[0].GetComponent<HandyGripFinger>().GetCurrentCollidedObject();
 
+        if ((!thumbColl || !indexColl) || thumbColl != indexColl)
+        {
+            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
+            _lastHeldObject = null;
+            return;
+        }
+        
+        MoveObject(thumbColl);
+        _lastHeldObject = thumbColl;
     }
 
     private void GetHandyFingerReferences()
