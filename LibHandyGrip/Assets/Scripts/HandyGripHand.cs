@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
+using Assert = UnityEngine.Assertions.Assert;
 
 namespace LibHandyGrip
 {
@@ -25,7 +25,7 @@ public class HandyGripHand : MonoBehaviour
     public Transform middle;
     public Transform ring;
     public Transform pinky;
-
+    
     private GameObject _handyThumb;
     private List<GameObject> _handyFingers;
 
@@ -33,6 +33,49 @@ public class HandyGripHand : MonoBehaviour
     private List<GameObject> _debugLines;
 
     private HandyGripObject _lastHeldObject;
+    // TODO : refactor fingers into structs
+    [Header("Optional Hand Positions")] 
+    public Transform wrist;
+    public Transform palm;
+    public Transform thumbDistal;
+    public Transform thumbProximal;
+    public Transform thumbMetacarpal;
+    public Transform indexDistal;
+    public Transform indexProximal;
+    public Transform indexMetacarpal;
+    public Transform middleDistal;
+    public Transform middleProximal;
+    public Transform middleMetacarpal;
+    public Transform ringDistal;
+    public Transform ringProximal;
+    public Transform ringMetacarpal;
+    public Transform littleDistal;
+    public Transform littleProximal;
+    public Transform littleMetacarpal;
+    
+    private GameObject _handyWrist;
+    private GameObject _handyPalm;
+
+    private GameObject _handyThumbDistal;
+    private GameObject _handyThumbProximal;
+    private GameObject _handyThumbMetacarpal;
+    
+    private GameObject _handyIndexDistal;
+    private GameObject _handyIndexProximal;
+    private GameObject _handyIndexMetacarpal;
+    
+    private GameObject _handyMiddleDistal;
+    private GameObject _handyMiddleProximal;
+    private GameObject _handyMiddleMetacarpal;
+    
+    private GameObject _handyRingDistal;
+    private GameObject _handyRingProximal;
+    private GameObject _handyRingMetacarpal;
+    
+    private GameObject _handyLittleDistal;
+    private GameObject _handyLittleProximal;
+    private GameObject _handyLittleMetacarpal;
+    
     
     private void Start()
     {
@@ -60,7 +103,7 @@ public class HandyGripHand : MonoBehaviour
             _lastHeldObject = null;
             return;
         }
-        
+
         MoveObject(thumbColl);
         _lastHeldObject = thumbColl;
     }
@@ -77,6 +120,29 @@ public class HandyGripHand : MonoBehaviour
         {
             _handyFingers[i].GetComponent<HandyGripFinger>().SetFingerID((LibHandyGrip.FingerType)i);
         }
+
+        _handyWrist = transform.Find("Wrist").gameObject;
+        _handyPalm = transform.Find("Palm").gameObject;
+
+        _handyThumbDistal = transform.Find("Thumb").transform.Find("ThumbDistal").gameObject;
+        _handyThumbProximal = transform.Find("Thumb").transform.Find("ThumbDistal").transform.Find("ThumbProximal").gameObject;
+        _handyThumbMetacarpal = transform.Find("Thumb").transform.Find("ThumbDistal").transform.Find("ThumbProximal").transform.Find("ThumbMetacarpal").gameObject;
+        
+        _handyIndexDistal = transform.Find("Index").transform.Find("IndexDistal").gameObject;
+        _handyIndexProximal = transform.Find("Index").transform.Find("IndexDistal").transform.Find("IndexProximal").gameObject;
+        _handyIndexMetacarpal = transform.Find("Index").transform.Find("IndexDistal").transform.Find("IndexProximal").transform.Find("IndexMetacarpal").gameObject;
+        
+        _handyMiddleDistal = transform.Find("Middle").transform.Find("MiddleDistal").gameObject;
+        _handyMiddleProximal = transform.Find("Middle").transform.Find("MiddleDistal").transform.Find("MiddleProximal").gameObject;
+        _handyMiddleMetacarpal = transform.Find("Middle").transform.Find("MiddleDistal").transform.Find("MiddleProximal").transform.Find("MiddleMetacarpal").gameObject;
+        
+        _handyRingDistal = transform.Find("Ring").transform.Find("RingDistal").gameObject;
+        _handyRingProximal = transform.Find("Ring").transform.Find("RingDistal").transform.Find("RingProximal").gameObject;
+        _handyRingMetacarpal = transform.Find("Ring").transform.Find("RingDistal").transform.Find("RingProximal").transform.Find("RingMetacarpal").gameObject;
+        
+        _handyLittleDistal = transform.Find("Pinky").transform.Find("PinkyDistal").gameObject;
+        _handyLittleProximal = transform.Find("Pinky").transform.Find("PinkyDistal").transform.Find("PinkyProximal").gameObject;
+        _handyLittleMetacarpal = transform.Find("Pinky").transform.Find("PinkyDistal").transform.Find("PinkyProximal").transform.Find("PinkyMetacarpal").gameObject;
     }
 
     private void SetFingerTransforms()
@@ -86,6 +152,73 @@ public class HandyGripHand : MonoBehaviour
         _handyFingers[(int)LibHandyGrip.FingerType.Middle].GetComponent<HandyGripFinger>().SetTransform(middle);
         _handyFingers[(int)LibHandyGrip.FingerType.Ring].GetComponent<HandyGripFinger>().SetTransform(ring);
         _handyFingers[(int)LibHandyGrip.FingerType.Pinky].GetComponent<HandyGripFinger>().SetTransform(pinky);
+
+        if (wrist)
+        {
+            _handyWrist.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(wrist);
+        }
+        else
+        {
+            _handyWrist.SetActive(false);
+        }
+
+        if (palm)
+        {
+            _handyPalm.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(palm);
+        }
+        else
+        {
+            _handyPalm.SetActive(false);
+        }
+
+        if (thumbDistal) _handyThumbDistal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(thumbDistal);
+        else _handyThumbDistal.SetActive(false);
+        
+        if (thumbProximal) _handyThumbProximal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(thumbProximal);
+        else _handyThumbProximal.SetActive(false);
+        
+        if (thumbMetacarpal) _handyThumbMetacarpal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(thumbMetacarpal);
+        else _handyThumbMetacarpal.SetActive(false);
+        
+        
+        if (indexDistal) _handyIndexDistal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(indexDistal);
+        else _handyIndexDistal.SetActive(false);
+        
+        if (indexProximal) _handyIndexProximal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(indexProximal);
+        else _handyIndexProximal.SetActive(false);
+        
+        if (indexMetacarpal) _handyIndexMetacarpal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(indexMetacarpal);
+        else _handyIndexMetacarpal.SetActive(false);
+        
+        
+        if (middleDistal) _handyMiddleDistal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(middleDistal);
+        else _handyMiddleDistal.SetActive(false);
+        
+        if (middleProximal) _handyMiddleProximal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(middleProximal);
+        else _handyMiddleProximal.SetActive(false);
+        
+        if (middleMetacarpal) _handyMiddleMetacarpal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(middleMetacarpal);
+        else _handyMiddleMetacarpal.SetActive(false);
+        
+        
+        if (ringDistal) _handyRingDistal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(ringDistal);
+        else _handyRingDistal.SetActive(false);
+        
+        if (ringProximal) _handyRingProximal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(ringProximal);
+        else _handyRingProximal.SetActive(false);
+        
+        if (ringMetacarpal) _handyRingMetacarpal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(ringMetacarpal);
+        else _handyRingMetacarpal.SetActive(false);
+        
+        
+        if (littleDistal) _handyLittleDistal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(littleDistal);
+        else _handyLittleDistal.SetActive(false);
+        
+        if (littleProximal) _handyLittleProximal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(littleProximal);
+        else _handyLittleProximal.SetActive(false);
+        
+        if (littleMetacarpal) _handyLittleMetacarpal.GetComponent<HandyGripNonCollidableHandPosition>().SetTransform(littleMetacarpal);
+        else _handyLittleMetacarpal.SetActive(false);
     }
     
     private void SetThumbReferences()
@@ -147,5 +280,8 @@ public class HandyGripHand : MonoBehaviour
     {
         var midpoint = 0.5f * (_handyThumb.transform.position + _handyFingers[0].transform.position);
         hgo.SetGrabPosition(midpoint);
+        
+        var targetDirection = (_handyFingers[0].transform.position - _handyThumb.transform.position).normalized;
+        hgo.SetGrabRotation(targetDirection);
     }
 }

@@ -107,9 +107,7 @@ public class HandyGripThumb : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            Debug.Log("distance from finger " + hi.distanceFromFinger);
-            Debug.Log("contact offset " + hi.contactOffset);
-            if (hi.distanceFromFinger < 0.01f)
+            if (hi.distanceFromFinger < 0.03f)
             {
                 return _objectList.GetObject(i);
             }

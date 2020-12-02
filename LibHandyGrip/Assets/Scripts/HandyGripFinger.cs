@@ -82,7 +82,6 @@ public class HandyGripFinger : MonoBehaviour
     private void Update()
     {
         transform.position = _transform.position;
-        //if(_currentlyCollidedObject && _whichFinger == FingerType.Index) Debug.Log("Index is colliding with " + _currentlyCollidedObject);
     }
 
     private void FixedUpdate()
@@ -162,7 +161,7 @@ public class HandyGripFinger : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < hi.contactOffset)
+            if (hi.distanceFromFinger < 0.03f)
             {
                 return _objectList.GetObject(i);
             }
