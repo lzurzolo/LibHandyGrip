@@ -18,6 +18,7 @@ namespace LibHandyGrip
 
 public class HandyGripHand : MonoBehaviour
 {
+    public bool logData;
     public int fingerCount;
     private const int _maximumFingers = 4;
     public Transform thumb;
@@ -75,7 +76,8 @@ public class HandyGripHand : MonoBehaviour
     private GameObject _handyLittleDistal;
     private GameObject _handyLittleProximal;
     private GameObject _handyLittleMetacarpal;
-    
+
+    private HandyDataWriter _dataWriter;
     
     private void Start()
     {
@@ -85,6 +87,74 @@ public class HandyGripHand : MonoBehaviour
         SetThumbReferences();
         SetFingerTransforms();
         if(_drawDebugRays) SetupDebugLines();
+        if (logData)
+        {
+            _dataWriter = new HandyDataWriter("HandyLog", true, 
+                new List<String>
+                {
+                    "Seconds",
+                    "ThumbTip_x",
+                    "ThumbTip_y",
+                    "ThumbTip_z",
+                    "ThumbDistal_x",
+                    "ThumbDistal_y",
+                    "ThumbDistal_z",
+                    "ThumbProximal_x",
+                    "ThumbProximal_y",
+                    "ThumbProximal_z",
+                    "ThumbMetacarpal_x",
+                    "ThumbMetacarpal_y",
+                    "ThumbMetacarpal_z",
+                    "IndexTip_x",
+                    "IndexTip_y",
+                    "IndexTip_z",
+                    "IndexDistal_x",
+                    "IndexDistal_y",
+                    "IndexDistal_z",
+                    "IndexProximal_x",
+                    "IndexProximal_y",
+                    "IndexProximal_z",
+                    "IndexMetacarpal_x",
+                    "IndexMetacarpal_y",
+                    "IndexMetacarpal_z",
+                    "MiddleTip_x",
+                    "MiddleTip_y",
+                    "MiddleTip_z",
+                    "MiddleDistal_x",
+                    "MiddleDistal_y",
+                    "MiddleDistal_z",
+                    "MiddleProximal_x",
+                    "MiddleProximal_y",
+                    "MiddleProximal_z",
+                    "MiddleMetacarpal_x",
+                    "MiddleMetacarpal_y",
+                    "MiddleMetacarpal_z",
+                    "RingTip_x",
+                    "RingTip_y",
+                    "RingTip_z",
+                    "RingDistal_x",
+                    "RingDistal_y",
+                    "RingDistal_z",
+                    "RingProximal_x",
+                    "RingProximal_y",
+                    "RingProximal_z",
+                    "RingMetacarpal_x",
+                    "RingMetacarpal_y",
+                    "RingMetacarpal_z",
+                    "PinkyTip_x",
+                    "PinkyTip_y",
+                    "PinkyTip_z",
+                    "PinkyDistal_x",
+                    "PinkyDistal_y",
+                    "PinkyDistal_z",
+                    "PinkyProximal_x",
+                    "PinkyProximal_y",
+                    "PinkyProximal_z",
+                    "PinkyMetacarpal_x",
+                    "PinkyMetacarpal_y",
+                    "PinkyMetacarpal_z"
+                } );
+        }
     }
 
     private void Update()
@@ -106,6 +176,298 @@ public class HandyGripHand : MonoBehaviour
 
         MoveObject(thumbColl);
         _lastHeldObject = thumbColl;
+    }
+
+    private void LateUpdate()
+    {
+        if (logData)
+        {
+
+
+            List<float> data = new List<float>();
+
+            if (thumb)
+            {
+                var thumbPos = thumb.position;
+                data.Add(thumbPos.x);
+                data.Add(thumbPos.y);
+                data.Add(thumbPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (thumbDistal)
+            {
+                var thumbDistalPos = thumbDistal.position;
+                data.Add(thumbDistalPos.x);
+                data.Add(thumbDistalPos.y);
+                data.Add(thumbDistalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (thumbProximal)
+            {
+                var thumbProximalPos = thumbProximal.position;
+                data.Add(thumbProximalPos.x);
+                data.Add(thumbProximalPos.y);
+                data.Add(thumbProximalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (thumbMetacarpal)
+            {
+                var thumbMetacarpalPos = thumbMetacarpal.position;
+                data.Add(thumbMetacarpalPos.x);
+                data.Add(thumbMetacarpalPos.y);
+                data.Add(thumbMetacarpalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (index)
+            {
+                var indexPos = index.position;
+                data.Add(indexPos.x);
+                data.Add(indexPos.y);
+                data.Add(indexPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (indexDistal)
+            {
+                var indexDistalPos = indexDistal.position;
+                data.Add(indexDistalPos.x);
+                data.Add(indexDistalPos.y);
+                data.Add(indexDistalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (indexProximal)
+            {
+                var indexProximalPos = indexProximal.position;
+                data.Add(indexProximalPos.x);
+                data.Add(indexProximalPos.y);
+                data.Add(indexProximalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (indexMetacarpal)
+            {
+                var indexMetacarpalPos = indexMetacarpal.position;
+                data.Add(indexMetacarpalPos.x);
+                data.Add(indexMetacarpalPos.y);
+                data.Add(indexMetacarpalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (middle)
+            {
+                var middlePos = middle.position;
+                data.Add(middlePos.x);
+                data.Add(middlePos.y);
+                data.Add(middlePos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (middleDistal)
+            {
+                var middleDistalPos = middleDistal.position;
+                data.Add(middleDistalPos.x);
+                data.Add(middleDistalPos.y);
+                data.Add(middleDistalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (middleProximal)
+            {
+                var middleProximalPos = middleProximal.position;
+                data.Add(middleProximalPos.x);
+                data.Add(middleProximalPos.y);
+                data.Add(middleProximalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (middleMetacarpal)
+            {
+                var middleMetacarpalPos = middleMetacarpal.position;
+                data.Add(middleMetacarpalPos.x);
+                data.Add(middleMetacarpalPos.y);
+                data.Add(middleMetacarpalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (ring)
+            {
+                var ringPos = ring.position;
+                data.Add(ringPos.x);
+                data.Add(ringPos.y);
+                data.Add(ringPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (ringDistal)
+            {
+                var ringDistalPos = ringDistal.position;
+                data.Add(ringDistalPos.x);
+                data.Add(ringDistalPos.y);
+                data.Add(ringDistalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (ringProximal)
+            {
+                var ringProximalPos = ringProximal.position;
+                data.Add(ringProximalPos.x);
+                data.Add(ringProximalPos.y);
+                data.Add(ringProximalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (ringMetacarpal)
+            {
+                var ringMetacarpalPos = ringMetacarpal.position;
+                data.Add(ringMetacarpalPos.x);
+                data.Add(ringMetacarpalPos.y);
+                data.Add(ringMetacarpalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (pinky)
+            {
+                var pinkyPos = pinky.position;
+                data.Add(pinkyPos.x);
+                data.Add(pinkyPos.y);
+                data.Add(pinkyPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (littleDistal)
+            {
+                var littleDistalPos = littleDistal.position;
+                data.Add(littleDistalPos.x);
+                data.Add(littleDistalPos.y);
+                data.Add(littleDistalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (littleProximal)
+            {
+                var littleProximalPos = littleProximal.position;
+                data.Add(littleProximalPos.x);
+                data.Add(littleProximalPos.y);
+                data.Add(littleProximalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            if (littleMetacarpal)
+            {
+                var littleMetacarpalPos = littleMetacarpal.position;
+                data.Add(littleMetacarpalPos.x);
+                data.Add(littleMetacarpalPos.y);
+                data.Add(littleMetacarpalPos.z);
+            }
+            else
+            {
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+                data.Add(float.NaN);
+            }
+
+            _dataWriter.WriteFloats(Time.time, data);
+        }
     }
 
     private void GetHandyFingerReferences()
@@ -283,5 +645,10 @@ public class HandyGripHand : MonoBehaviour
         
         var targetDirection = (_handyFingers[0].transform.position - _handyThumb.transform.position).normalized;
         hgo.SetGrabRotation(targetDirection);
+    }
+
+    private void OnDestroy()
+    {
+        _dataWriter.Close();
     }
 }

@@ -16,6 +16,7 @@
       <Path>Library</Path>
       <Path>Logs</Path>
       <Path>Temp</Path>
+      <Path>log</Path>
       <Path>obj</Path>
     </explicitExcludes>
   </component>
