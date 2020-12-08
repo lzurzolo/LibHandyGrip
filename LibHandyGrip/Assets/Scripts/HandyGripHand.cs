@@ -37,6 +37,14 @@ namespace LibHandyGrip
         private List<HandyGripBone> _bones;
         private FingerType _whichFinger;
 
+        public void SetActive(bool a)
+        {
+            _tip.isActive = a;
+            foreach (var b in _bones)
+            {
+                b.isActive = a;
+            }
+        }
         public HandyGripBone GetBone(LibHandyGrip.BoneType b)
         {
             return _bones[(int)b];
@@ -94,6 +102,14 @@ namespace LibHandyGrip
         public HandyGripThumbTip GetTip()
         {
             return _tip;
+        }
+
+        public void SetActive(bool a)
+        {
+            foreach (var b in _bones)
+            {
+                b.isActive = a;
+            }
         }
 
         public void SetTipTransform(ref Transform t)
@@ -206,6 +222,8 @@ public class HandyGripHand : MonoBehaviour
         var thumbProx = thumbDist.transform.Find("ThumbProximal");
         _thumb.SetBone(BoneType.Proximal, thumbProx.GetComponent<HandyGripBone>());
         _thumb.SetBone(BoneType.Metacarpal, thumbProx.transform.Find("ThumbMetacarpal").GetComponent<HandyGripBone>());
+        _thumb.SetActive(true);
+
 
         string[] fingerTransforms =  {"Index", "Middle", "Ring", "Pinky"};
 
@@ -217,6 +235,7 @@ public class HandyGripHand : MonoBehaviour
             var proximal = distal.transform.Find(fingerTransforms[i - 1] + "Proximal");
             _fingers[i - 1].SetBone(BoneType.Proximal, proximal.GetComponent<HandyGripBone>());
             _fingers[i - 1].SetBone(BoneType.Metacarpal, proximal.transform.Find(fingerTransforms[i - 1] + "Metacarpal").GetComponent<HandyGripBone>());
+            _fingers[i - 1].SetActive(true);
         }
     }
 

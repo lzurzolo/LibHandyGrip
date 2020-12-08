@@ -5,14 +5,15 @@ using UnityEngine;
 public class HandyGripBone : MonoBehaviour
 {
     private Transform _transform;
+    public bool isActive;
     private void Start()
     {
-        
+        isActive = false;
     }
     
     private void Update()
     {
-        transform.position = _transform.position;
+        if(isActive) transform.position = _transform.position;
     }
 
     public void SetTransform(Transform t)

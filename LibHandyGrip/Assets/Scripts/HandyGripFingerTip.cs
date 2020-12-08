@@ -67,6 +67,7 @@ public class HandyObjectList
 
 public class HandyGripFingerTip : MonoBehaviour
 {
+    public bool isActive;
     private Transform _transform;
     private HandyGripThumbTip _thumbTip;
 
@@ -77,15 +78,17 @@ public class HandyGripFingerTip : MonoBehaviour
     
     private void Start()
     {
+        isActive = false;
         _objectList = new HandyObjectList();
     }
     private void Update()
     {
-        transform.position = _transform.position;
+        if(isActive) transform.position = _transform.position;
     }
 
     private void FixedUpdate()
     {
+        if (!isActive) return;
         if (AreObjectsWithinGrasp())
         {
             _currentlyCollidedObject = SetObjectCollision();
