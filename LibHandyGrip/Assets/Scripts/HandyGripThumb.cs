@@ -6,7 +6,7 @@ using UnityEngine;
 public class HandyGripThumb : MonoBehaviour
 {
     private Transform _transform;
-    private List<HandyGripFinger> _fingers;
+    private List<HandyGripFingerTip> _fingers;
 
     private HandyObjectList _objectList;
     private HandyGripObject _currentlyCollidedObject;
@@ -47,7 +47,7 @@ public class HandyGripThumb : MonoBehaviour
         _transform = t;
     }
 
-    public void SetFingerReferences(List<HandyGripFinger> fs)
+    public void SetFingerReferences(List<HandyGripFingerTip> fs)
     {
         _fingers = fs;
     }

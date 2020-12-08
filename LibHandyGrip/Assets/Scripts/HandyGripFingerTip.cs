@@ -65,7 +65,7 @@ public class HandyObjectList
     }
 }
 
-public class HandyGripFinger : MonoBehaviour
+public class HandyGripFingerTip : MonoBehaviour
 {
     private Transform _transform;
     private HandyGripThumb _thumb;
