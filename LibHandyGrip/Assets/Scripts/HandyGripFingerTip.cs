@@ -68,7 +68,7 @@ public class HandyObjectList
 public class HandyGripFingerTip : MonoBehaviour
 {
     private Transform _transform;
-    private HandyGripThumb _thumb;
+    private HandyGripThumbTip _thumbTip;
 
     private HandyObjectList _objectList;
     private HandyGripObject _currentlyCollidedObject;
@@ -102,15 +102,15 @@ public class HandyGripFingerTip : MonoBehaviour
         _transform = t;
     }
 
-    public void SetThumbReference(HandyGripThumb t)
+    public void SetThumbReference(HandyGripThumbTip t)
     {
-        _thumb = t;
+        _thumbTip = t;
     }
 
     public void UpdatePotentiallyGrabbableSet()
     {
         RaycastHit[] hits;
-        Vector3 rayDir = (_thumb.transform.position - transform.position).normalized;
+        Vector3 rayDir = (_thumbTip.transform.position - transform.position).normalized;
         hits = Physics.RaycastAll(transform.position, rayDir);
 
         HandyObjectList tempList = new HandyObjectList();

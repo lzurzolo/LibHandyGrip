@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandyGripNonCollidableHandPosition : MonoBehaviour
+public class HandyGripBone : MonoBehaviour
 {
     private Transform _transform;
     private void Start()

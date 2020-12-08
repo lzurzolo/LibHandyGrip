@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandyGripThumb : MonoBehaviour
+public class HandyGripThumbTip : MonoBehaviour
 {
     private Transform _transform;
     private List<HandyGripFingerTip> _fingers;
@@ -19,14 +19,6 @@ public class HandyGripThumb : MonoBehaviour
     private void Update()
     {
         transform.position = _transform.position;
-        //if(_currentlyCollidedObject) Debug.Log("Thumb is colliding with " + _currentlyCollidedObject);
-        if (AreObjectsWithinGrasp())
-        {
-            foreach (var o in _objectList.objectsWithinGrasp)
-            {
-                //Debug.Log(o.name + " is within grasp");
-            }
-        }
     }
     
     private void FixedUpdate()
