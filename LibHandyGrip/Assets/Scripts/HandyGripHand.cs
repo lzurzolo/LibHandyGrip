@@ -153,27 +153,7 @@ public class HandyGripHand : MonoBehaviour
     
     private HandyGripBone _wrist;
     private HandyGripBone _palm;
-
-    private GameObject _handyThumbDistal;
-    private GameObject _handyThumbProximal;
-    private GameObject _handyThumbMetacarpal;
     
-    private GameObject _handyIndexDistal;
-    private GameObject _handyIndexProximal;
-    private GameObject _handyIndexMetacarpal;
-    
-    private GameObject _handyMiddleDistal;
-    private GameObject _handyMiddleProximal;
-    private GameObject _handyMiddleMetacarpal;
-    
-    private GameObject _handyRingDistal;
-    private GameObject _handyRingProximal;
-    private GameObject _handyRingMetacarpal;
-    
-    private GameObject _handyLittleDistal;
-    private GameObject _handyLittleProximal;
-    private GameObject _handyLittleMetacarpal;
-
     private HandyDataWriter _dataWriter;
     
     private void Start()
