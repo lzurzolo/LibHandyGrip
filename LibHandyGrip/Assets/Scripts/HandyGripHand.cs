@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Leap;
+using LibHandyGrip;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 
@@ -18,10 +19,43 @@ namespace LibHandyGrip
 
     public enum BoneType
     {
-        Tip = 0,
-        Distal,
+        Distal = 0,
         Proximal,
         Metacarpal
+    }
+
+    public class HandyGripFinger
+    {
+        public HandyGripFinger(HandyGripFingerTip t, FingerType ft)
+        {
+            _tip = t;
+            _whichFinger = ft;
+            _bones = new List<HandyGripNonCollidableHandPosition>(3);
+        }
+        
+        private HandyGripFingerTip _tip;
+        private List<HandyGripNonCollidableHandPosition> _bones;
+        private FingerType _whichFinger;
+
+        public HandyGripNonCollidableHandPosition GetBone(LibHandyGrip.BoneType b)
+        {
+            return _bones[(int)b];
+        }
+
+        public HandyGripFingerTip GetTip()
+        {
+            return _tip;
+        }
+
+        public void SetTipTransform(Transform t)
+        {
+            _tip.SetTransform(t);
+        }
+
+        public void SetBoneTransform(BoneType b, Transform t)
+        {
+            _bones[(int)b].SetTransform(t);
+        }
     }
 };
 
@@ -38,6 +72,7 @@ public class HandyGripHand : MonoBehaviour
     
     private GameObject _handyThumb;
     private List<HandyGripFingerTip> _handyFingers;
+    private List<HandyGripFinger> _newHandyFingers;
 
     public bool _drawDebugRays;
     private List<GameObject> _debugLines;
@@ -91,7 +126,8 @@ public class HandyGripHand : MonoBehaviour
     private void Start()
     {
         Assert.IsTrue(fingerCount > 0 && fingerCount <= _maximumFingers);
-        _handyFingers = new List<HandyGripFingerTip>(_maximumFingers);
+        //_handyFingers = new List<HandyGripFingerTip>(_maximumFingers);
+        _newHandyFingers = new List<HandyGripFinger>(_maximumFingers);
         GetHandyFingerReferences();
         SetThumbReferences();
         SetFingerTransforms();
@@ -107,7 +143,7 @@ public class HandyGripHand : MonoBehaviour
     private void FixedUpdate()
     {
         var thumbColl = _handyThumb.GetComponent<HandyGripThumb>().GetCurrentCollidedObject();
-        var indexColl = _handyFingers[0].GetCurrentCollidedObject();
+        var indexColl = _newHandyFingers[0].GetTip().GetCurrentCollidedObject();
 
         if ((!thumbColl || !indexColl) || thumbColl != indexColl)
         {
@@ -128,15 +164,11 @@ public class HandyGripHand : MonoBehaviour
     private void GetHandyFingerReferences()
     {
         _handyThumb = transform.Find("Thumb").gameObject;
-        _handyFingers.Insert((int)LibHandyGrip.FingerType.Index, transform.Find("Index").GetComponent<HandyGripFingerTip>());
-        _handyFingers.Insert((int)LibHandyGrip.FingerType.Middle, transform.Find("Middle").GetComponent<HandyGripFingerTip>());
-        _handyFingers.Insert((int)LibHandyGrip.FingerType.Ring, transform.Find("Ring").GetComponent<HandyGripFingerTip>());
-        _handyFingers.Insert((int)LibHandyGrip.FingerType.Pinky, transform.Find("Pinky").GetComponent<HandyGripFingerTip>());
 
-        for (int i = 0; i < _handyFingers.Count; i++)
-        {
-            _handyFingers[i].SetFingerID((LibHandyGrip.FingerType)i);
-        }
+        _newHandyFingers.Insert((int)LibHandyGrip.FingerType.Index, new HandyGripFinger(transform.Find("Index").GetComponent<HandyGripFingerTip>(), FingerType.Index));
+        _newHandyFingers.Insert((int)LibHandyGrip.FingerType.Middle, new HandyGripFinger(transform.Find("Middle").GetComponent<HandyGripFingerTip>(), FingerType.Middle));
+        _newHandyFingers.Insert((int)LibHandyGrip.FingerType.Ring, new HandyGripFinger(transform.Find("Ring").GetComponent<HandyGripFingerTip>(), FingerType.Ring));
+        _newHandyFingers.Insert((int)LibHandyGrip.FingerType.Pinky, new HandyGripFinger(transform.Find("Pinky").GetComponent<HandyGripFingerTip>(), FingerType.Pinky));
 
         _handyWrist = transform.Find("Wrist").gameObject;
         _handyPalm = transform.Find("Palm").gameObject;
@@ -165,10 +197,11 @@ public class HandyGripHand : MonoBehaviour
     private void SetFingerTransforms()
     {
         _handyThumb.GetComponent<HandyGripThumb>().SetTransform(thumbTip);
-        _handyFingers[(int)LibHandyGrip.FingerType.Index].SetTransform(indexTip);
-        _handyFingers[(int)LibHandyGrip.FingerType.Middle].SetTransform(middleTip);
-        _handyFingers[(int)LibHandyGrip.FingerType.Ring].SetTransform(ringTip);
-        _handyFingers[(int)LibHandyGrip.FingerType.Pinky].SetTransform(littleTip);
+
+        _newHandyFingers[(int)LibHandyGrip.FingerType.Index].SetTipTransform(indexTip);
+        _newHandyFingers[(int)LibHandyGrip.FingerType.Middle].SetTipTransform(middleTip);
+        _newHandyFingers[(int)LibHandyGrip.FingerType.Ring].SetTipTransform(ringTip);
+        _newHandyFingers[(int)LibHandyGrip.FingerType.Pinky].SetTipTransform(littleTip);
 
         if (wrist)
         {
@@ -241,15 +274,15 @@ public class HandyGripHand : MonoBehaviour
     private void SetThumbReferences()
     {
         var handyThumbScript = _handyThumb.GetComponent<HandyGripThumb>();
-        foreach (var hgf in _handyFingers)
+        foreach (var hf in _newHandyFingers)
         {
-            hgf.GetComponent<HandyGripFingerTip>().SetThumbReference(handyThumbScript);
+            hf.GetTip().SetThumbReference(handyThumbScript);
         }
 
         var fingerScripts = new List<HandyGripFingerTip>(4);
         for (int i = 0; i < fingerScripts.Capacity; i++)
         {
-            fingerScripts.Insert(i, _handyFingers[i].GetComponent<HandyGripFingerTip>());
+            fingerScripts.Insert(i, _newHandyFingers[i].GetTip());
         }
         
         handyThumbScript.SetFingerReferences(fingerScripts);
@@ -267,7 +300,7 @@ public class HandyGripHand : MonoBehaviour
             lr.material = new Material(Shader.Find("Standard"));
             lr.material.color = Color.red;
             lr.SetPosition(0, _handyThumb.transform.position);
-            lr.SetPosition(1, _handyFingers[i].transform.position);
+            lr.SetPosition(1, _newHandyFingers[i].GetTip().transform.position);
             lr.startWidth = 0.001f;
             lr.endWidth = 0.001f;
             _debugLines.Insert(i, line);
@@ -349,7 +382,7 @@ public class HandyGripHand : MonoBehaviour
         for (int i = 0; i < _debugLines.Count; i++)
         {
             var lr = _debugLines[i].GetComponent<LineRenderer>();
-            var finger = _handyFingers[i].GetComponent<HandyGripFingerTip>();
+            var finger = _newHandyFingers[i].GetTip();
             if (finger.AreObjectsWithinGrasp())
             {
                 lr.material.color = Color.green;
@@ -359,16 +392,16 @@ public class HandyGripHand : MonoBehaviour
                 lr.material.color = Color.red;
             }
             lr.SetPosition(0, _handyThumb.transform.position);
-            lr.SetPosition(1, _handyFingers[i].transform.position);
+            lr.SetPosition(1, _newHandyFingers[i].GetTip().transform.position);
         }
     }
 
     private void MoveObject(HandyGripObject hgo)
     {
-        var midpoint = 0.5f * (_handyThumb.transform.position + _handyFingers[0].transform.position);
+        var midpoint = 0.5f * (_handyThumb.transform.position + _newHandyFingers[0].GetTip().transform.position);
         hgo.SetGrabPosition(midpoint);
         
-        var targetDirection = (_handyFingers[0].transform.position - _handyThumb.transform.position).normalized;
+        var targetDirection = (_newHandyFingers[0].GetTip().transform.position - _handyThumb.transform.position).normalized;
         hgo.SetGrabRotation(targetDirection);
     }
 
