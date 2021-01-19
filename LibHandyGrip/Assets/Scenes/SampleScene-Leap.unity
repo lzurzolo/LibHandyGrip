@@ -2176,7 +2176,7 @@ PrefabInstance:
     - target: {fileID: 3032856647273993339, guid: 7274523864f390c4290672d07f2b5f46,
         type: 3}
       propertyPath: logData
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3032856647273993339, guid: 7274523864f390c4290672d07f2b5f46,
         type: 3}
