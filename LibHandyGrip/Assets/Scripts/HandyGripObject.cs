@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -19,16 +17,13 @@ public class HandyGripObject : MonoBehaviour
         // object must have a rigid body
         _rigidbody = GetComponent<Rigidbody>();
         Assert.IsNotNull(_rigidbody);
+        
         _initialOrientation = transform.rotation;
         _isBeingMoved = false;
+
+        StartCoroutine(SetCurrentOrientation());
     }
 
-    private void Update()
-    {
-        if (!_rigidbody) Debug.Log("RB is null");
-        if (!_isBeingMoved) _initialOrientation = transform.rotation;
-    }
-    
     public void SetGrabPosition(Vector3 pos)
     {
         _rigidbody.isKinematic = true;
@@ -47,5 +42,20 @@ public class HandyGripObject : MonoBehaviour
     {
         _rigidbody.isKinematic = false;
         _isBeingMoved = false;
+    }
+    
+    private IEnumerator SetCurrentOrientation()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(1);
+        while (true)
+        {
+            // We need to ensure that the object's transform is buffered at all times when stationary
+            // TODO : the object is stationary, why does this need to update? Perhaps move this to ReleaseObject()
+            if (!_isBeingMoved)
+            {
+                _initialOrientation = transform.rotation;
+            }
+            yield return waitTime;
+        }
     }
 }

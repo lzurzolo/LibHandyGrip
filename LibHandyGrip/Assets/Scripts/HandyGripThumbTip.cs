@@ -18,11 +18,12 @@ public class HandyGripThumbTip : MonoBehaviour
     
     private void Update()
     {
-        transform.position = _transform.position;
+        if(_transform) transform.position = _transform.position;
     }
     
     private void FixedUpdate()
     {
+        
         if (AreObjectsWithinGrasp())
         {
             _currentlyCollidedObject = SetObjectCollision();
@@ -32,6 +33,7 @@ public class HandyGripThumbTip : MonoBehaviour
             _currentlyCollidedObject = null;
         }
         UpdatePotentiallyGrabbableSet();
+        
     }
     
     public void SetTransform(Transform t)
