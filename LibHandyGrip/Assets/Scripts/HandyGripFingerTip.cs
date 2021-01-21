@@ -10,15 +10,22 @@ public class HandyHitInfo
     {
         distanceFromFinger = distance;
         contactOffset = offset;
+        collision = null;
     }
 
     public void UpdateHitInfo(float distance, float offset)
     {
         distanceFromFinger = distance;
         contactOffset = offset;
-    }    
+    }
+
+    public void SetCollision(Collision c)
+    {
+        collision = c;
+    }
     public float distanceFromFinger;
     public float contactOffset;
+    public Collision collision;
 };
 
 public class HandyObjectList
@@ -163,7 +170,7 @@ public class HandyGripFingerTip : MonoBehaviour
         for (int i = 0; i < objectCount; i++)
         {
             var hi = _objectList.GetHitInfo(i);
-            if (hi.distanceFromFinger < 0.03f)
+            if (hi.distanceFromFinger < 0.02f)
             {
                 return _objectList.GetObject(i);
             }

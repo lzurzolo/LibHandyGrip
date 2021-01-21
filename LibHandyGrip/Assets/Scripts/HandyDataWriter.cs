@@ -64,7 +64,6 @@ class HandyDataWriter
     public void WriteEvent(float ms, List<string> data)
     {
         eventsw.Write(ms);
-        eventsw.Write(",");
 
         foreach (var s in data)
         {

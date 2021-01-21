@@ -180,6 +180,8 @@ public class HandyGripHand : MonoBehaviour
     private HandyGripBone _palm;
     
     private HandyDataWriter _dataWriter;
+
+    private bool _loggedGraspEvent;
     
     [HideInInspector] public Transform startingNullTransform;
     [HideInInspector] public List<GameObject> nullFingers;
@@ -213,6 +215,8 @@ public class HandyGripHand : MonoBehaviour
             StartCoroutine(UpdateDebugLines());
         }
         if (logData) InitLog();
+
+        _loggedGraspEvent = false;
     }
 
     private void FixedUpdate()
@@ -222,9 +226,20 @@ public class HandyGripHand : MonoBehaviour
 
         if ((!thumbColl || !indexColl) || thumbColl != indexColl)
         {
-            if(_lastHeldObject) _lastHeldObject.ReleaseObject();
+            if (_lastHeldObject)
+            {
+                _lastHeldObject.ReleaseObject();
+                _dataWriter.WriteEvent(Time.time, new List<string>( new string[]{"Released", _lastHeldObject.gameObject.name }));
+                _loggedGraspEvent = false;
+            }
             _lastHeldObject = null;
             return;
+        }
+
+        if (!_loggedGraspEvent)
+        {
+            _dataWriter.WriteEvent(Time.time, new List<string>( new string[]{"Grasped", thumbColl.gameObject.name }));
+            _loggedGraspEvent = true;
         }
 
         MoveObject(thumbColl);
